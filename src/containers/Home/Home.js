@@ -3,7 +3,7 @@ import React from 'react';
 const Home = () => {
     return (
         <div className="container">
-            <h4>Register and create your own task lists...</h4>
+            <h4>You are loged in.</h4>
         </div>
     )
 }

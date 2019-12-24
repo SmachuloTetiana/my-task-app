@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setRegisterUser: (users) => dispatch(setRegisterUser(users))
+    setRegisterUser: user => dispatch(setRegisterUser(user))
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Register);

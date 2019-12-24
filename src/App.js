@@ -3,9 +3,9 @@ import { Route, Switch } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-import Header from './components/Header/Header';
-import Home from './components/Home';
+import Header from './components/Header';
 
+import Home from './containers/Home/Home';
 import Register from './containers/Register';
 import Login from './containers/Login';
 

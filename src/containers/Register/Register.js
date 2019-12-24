@@ -18,17 +18,11 @@ const Register = props => {
         event.preventDefault();
 
         setUser({
-            email: user.email.value,
+            email: user.email,
             password: user.password
         })
 
         props.setRegisterUser(user);
-    }
-
-    const handleLogin = event => {
-        event.preventDefault();
-
-        
     }
 
     return (
@@ -59,12 +53,6 @@ const Register = props => {
                     onClick={handleRegister}
                     className="btn btn-primary">
                         Register
-                </button>
-                <button
-                    type="submit"
-                    onClick={handleLogin}
-                    className="btn btn-primary">
-                        Login
                 </button>
             </form>
         </div>
