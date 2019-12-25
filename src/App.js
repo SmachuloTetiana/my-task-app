@@ -5,7 +5,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 import Header from './components/Header';
 
-import Home from './containers/Home/Home';
+import Home from './containers/Home';
 import Register from './containers/Register';
 import Login from './containers/Login';
 

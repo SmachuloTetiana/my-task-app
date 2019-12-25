@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN } from "../constants/actionTypes";
+import { REGISTER, LOGIN, ADD_TASK } from "../constants/actionTypes";
 
 export const setRegisterUser = person => {
     return {
@@ -11,5 +11,12 @@ export const setCurrentUser = person => {
     return {
         type: LOGIN,
         value: person
+    }
+}
+
+export const addTask = task => {
+    return {
+        type: ADD_TASK,
+        value: task
     }
 }

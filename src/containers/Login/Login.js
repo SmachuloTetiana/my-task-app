@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import  { Redirect } from 'react-router-dom';
 
 const Login = props => {
     const [user, setUser] = useState({
@@ -22,16 +23,21 @@ const Login = props => {
         
         const { email, password } = user;
 
-        props.users.find(el => {
-            if(email !== el.email || password !== el.password) {
-                setError('Confirm your e-mail or password field!')
+        props.users.forEach(obj => {
+            if(email !== obj.email || password !== obj.password) {
+                setError('Your credentials are invalid!')
             } else {
                 setError(null);
-                setSuccess('You are loged in.');
-                props.setCurrentUser(user);
+                setSuccess('You are logged in.');
+
+                props.setCurrentUser(obj);
                 props.history.push('/');
             }
         })
+    }
+
+    if (props.currentUser) {
+        return <Redirect to='/' />
     }
 
     return (

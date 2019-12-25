@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import  { Redirect } from 'react-router-dom';
 
 const Register = props => {
     const [user, setUser] = useState({
@@ -23,6 +24,10 @@ const Register = props => {
         })
 
         props.setRegisterUser(user);
+    }
+
+    if (props.currentUser) {
+        return <Redirect to='/' />
     }
 
     return (

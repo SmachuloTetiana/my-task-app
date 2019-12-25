@@ -3,7 +3,8 @@ import { setRegisterUser } from '../../store/actions';
 import Register from './Register';
 
 const mapStateToProps = state => ({
-    users: state.auth.users
+    users: state.auth.users,
+    currentUser: state.auth.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({
