@@ -16,6 +16,14 @@ code {
   margin-bottom: 30px;
 }
 
+.navbar-nav {
+  flex: auto;
+}
+
+.navbar-nav .btn {
+  margin-right: .5rem;
+}
+
 .task {
   margin: 15px 0;
 }

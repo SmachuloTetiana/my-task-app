@@ -24,8 +24,8 @@ const Header = props => {
                                 </li>
 
                                 <button
-                                    type="submit"
-                                    className="btn btn-primary"
+                                    type="button"
+                                    className="btn btn-primary ml-auto"
                                     onClick={handleLogOut}>
                                     Log Out
                                 </button>
