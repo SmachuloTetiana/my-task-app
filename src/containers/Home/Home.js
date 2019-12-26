@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import  { Redirect } from 'react-router-dom';
 
 const Home = props => {
+    const tasks = props.currentUser.tasks;
     const [task, setTask] = useState({
         name: ''
     });
@@ -14,26 +15,32 @@ const Home = props => {
         setTask({ name: '' });
     }
 
-    if (!props.currentUser) {
-        return <Redirect to='/login' />
-    }
-
-    const onDeleteTask = id => {
+    const onDeleteTaskHandler = id => {
         props.deletedTask(id);
 
-        setTask({ task })
+        setTask({ name: '' });
     }
 
-    function onEditTask(id) {
-        props.editTask(id)
+    const onEditTask = id => {
+        props.editTask(id);
 
-        setTask({ task })
+        setTask({ name: '' });
     }
 
-    const onSaveTask = id => {        
+    const onSaveTask = (id, task) => {        
         props.saveEditTask(id, task);
 
-        setTask({ task })
+        setTask({ name: '' });
+    }
+
+    const onTaskNameChangeHandler = (editedTask, name) => {
+        editedTask.name = name;
+
+        setTask({ name: '' });
+    }
+
+    if (!props.currentUser) {
+        return <Redirect to='/login' />
     }
 
     return (
@@ -43,25 +50,25 @@ const Home = props => {
 
                 <div className="list-tasks">
                     {
-                        props.currentUser.tasks.map((task, key) => (
+                        tasks.map((item, key) => (
                             <div className="d-flex flex-column task" key={key}>    
-                                { task.editItem ? (                             
+                                { item.editItem ? (                             
                                     <form className="d-flex flex-row">
                                         <input 
                                             type="text" 
                                             className="form-control" 
-                                            defaultValue={task.name} 
-                                            onChange={event => setTask({ name: event.target.value })} />
+                                            value={item.name} 
+                                            onChange={event => onTaskNameChangeHandler(item, event.target.value)} />
                                         <button 
                                             type="button"
-                                            onClick={() => onSaveTask(key)} 
+                                            onClick={() => onSaveTask(key, item)} 
                                             className="btn btn-primary">
                                                 Save
                                         </button>
                                     </form>
                                 ) : (                                    
                                     <div className="d-flex flex-row justify-content-between align-items-center">
-                                        { task.name }      
+                                        { item.name }      
 
                                         <button 
                                             type="button" 
@@ -74,7 +81,7 @@ const Home = props => {
                                         <button 
                                             type="button" 
                                             className="btn btn-danger" 
-                                            onClick={() => onDeleteTask(key)}>
+                                            onClick={() => onDeleteTaskHandler(key)}>
                                                 Delete
                                         </button>
                                     </div> 
@@ -85,7 +92,7 @@ const Home = props => {
                     }
                 </div>
 
-                <form>
+                <form onSubmit={addTaskHandler}>
                     <div className="form-group">
                         <textarea
                             required
@@ -97,11 +104,8 @@ const Home = props => {
                         </textarea>
                     </div>
                     
-                    <button 
-                        type="submit" 
-                        onClick={addTaskHandler}
-                        className="btn btn-primary">
-                            Add Task
+                    <button type="submit" className="btn btn-primary">
+                        Add Task
                     </button>
                 </form>
             </div>

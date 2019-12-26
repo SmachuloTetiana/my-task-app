@@ -60,15 +60,13 @@ export const authReducer = (state = initialState, action) => {
 
             return state;
         case EDIT_TASK:
-            state.currentUser.tasks.map((task, key) => {
+            state.currentUser.tasks.forEach((task, key) => {
                 if(key === action.itemId) {
                     state.currentUser.tasks[key].editItem = true;
                 } else {
                     state.currentUser.tasks[key].editItem = false;
                 }
-            })
-
-            localStorage.setItem('managerDB', JSON.stringify(state));
+            });
 
             return state;
         case SAVE_EDIT_TASK:
