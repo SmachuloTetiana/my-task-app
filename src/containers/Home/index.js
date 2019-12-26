@@ -1,5 +1,5 @@
 import { connect } from "react-redux";
-import { addTask } from "../../store/actions";
+import { addTask, deletedTask, saveEditTask, editTask } from "../../store/actions";
 import Home from "./Home";
 
 const mapStateToProps = state => ({
@@ -7,7 +7,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  addTask: task => dispatch(addTask(task))
+  addTask: task => dispatch(addTask(task)),
+  deletedTask: id => dispatch(deletedTask(id)),
+  editTask: id => dispatch(editTask(id)),
+  saveEditTask: (id, task) => dispatch(saveEditTask(id, task))
 })
 
 
