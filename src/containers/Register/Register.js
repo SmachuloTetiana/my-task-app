@@ -32,12 +32,13 @@ const Register = props => {
 
     return (
         <div className="container">
-            <form>
+            <form onSubmit={handleRegister}>
                 <div className="form-group">
                     <label htmlFor="email">Name</label>
                     <input 
                         type="email"
                         name="email"
+                        required
                         value={user.email}
                         onChange={handleChangeInput}
                         className="form-control"
@@ -48,6 +49,7 @@ const Register = props => {
                     <input 
                         type="text"
                         name="password"
+                        required
                         value={user.password}
                         onChange={handleChangeInput}
                         className="form-control"
@@ -55,7 +57,6 @@ const Register = props => {
                 </div>
                 <button
                     type="submit"
-                    onClick={handleRegister}
                     className="btn btn-primary">
                         Register
                 </button>

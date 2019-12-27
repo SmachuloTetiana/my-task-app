@@ -1,22 +1,22 @@
-import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK, EDIT_TASK, SAVE_EDIT_TASK } from "../constants/actionTypes";
+import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK } from "../constants/actionTypes";
 
 const managerDB = JSON.parse(localStorage.getItem('managerDB'));
 const initialState = managerDB || {
     currentUser: null,
-    users: []
+    users: [],
+    tasks: []
 };
 
 export const authReducer = (state = initialState, action) => {
-    let updatedCurrentState;
+    let updatedCurrentState, updatedState;
 
     switch(action.type) {
         case REGISTER: 
             const { value: user } = action;
 
             user.id = state.users.length + 1;
-            user.tasks = [];
 
-            const updatedState = {
+            updatedState = {
                 ...state,
                 users: [
                     ...state.users,
@@ -37,46 +37,35 @@ export const authReducer = (state = initialState, action) => {
 
             return updatedCurrentState;
         case ADD_TASK:
-            state.currentUser.tasks = [...state.currentUser.tasks, action.value];
-            state.users.forEach(user => {
-                if (user.id === state.currentUser.id) {
-                    user.tasks = state.currentUser.tasks;
-                }
-            });
+            const { payload: task } = action;
 
-            localStorage.setItem('managerDB', JSON.stringify(state));
+            task.id = state.tasks.length + 1;
+            task.userId = state.currentUser.id;
 
-            return state;
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks,
+                    task
+                ]
+            }
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
+
+            return updatedState;
         case DELETE_TASK:
-            state.currentUser.tasks.splice(action.value, 1);
+            state.tasks.splice(action.id, 1);
 
-            state.users.forEach(user => {
-                if(user.id === state.currentUser.id) {
-                    user.tasks = state.currentUser.tasks
-                }
-            })
-            
-            localStorage.setItem('managerDB', JSON.stringify(state));
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            }
 
-            return state;
-        case EDIT_TASK:
-            state.currentUser.tasks.forEach((task, key) => {
-                if(key === action.itemId) {
-                    state.currentUser.tasks[key].editItem = true;
-                } else {
-                    state.currentUser.tasks[key].editItem = false;
-                }
-            });
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
-            return state;
-        case SAVE_EDIT_TASK:
-            state.currentUser.tasks[action.itemId] = action.value;
-
-            // finish user
-
-            localStorage.setItem('managerDB', JSON.stringify(state));
-
-            return state;
+            return updatedState;
         default: 
             return state;
     }
