@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK } from "../constants/actionTypes";
+import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK, EDIT_TASK, SAVE_EDIT_TASK } from "../constants/actionTypes";
 
 const managerDB = JSON.parse(localStorage.getItem('managerDB'));
 const initialState = managerDB || {
@@ -54,7 +54,40 @@ export const authReducer = (state = initialState, action) => {
 
             return updatedState;
         case DELETE_TASK:
-            state.tasks.splice(action.id, 1);
+            state.tasks.filter((task, key) => task.id === action.id ? state.tasks.splice(key, 1) : null);
+
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            }
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
+
+            return updatedState;
+        case EDIT_TASK:
+            state.tasks.filter(task => task.id === action.id ? task.isEditing = true : task.isEditing = false);
+
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            }
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
+
+            return updatedState;
+        case SAVE_EDIT_TASK:
+            state.tasks.filter(task => {
+                if (task.id === action.id && action.newTask) {
+                    task.text = action.newTask;
+                    task.isEditing = false;
+                } else {
+                    task.isEditing = false;
+                }
+            });
 
             updatedState = {
                 ...state,

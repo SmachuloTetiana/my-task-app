@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import  { Redirect } from 'react-router-dom';
-import TasksList from '../../components/TasksList';
+import TaskList from '../../components/Task_List/Task_List';
 
 const Home = props => {
     const [task, setTask] = useState();
@@ -22,7 +22,7 @@ const Home = props => {
             <div className="task-wrapper">
                 <h2 className="task-title">To do</h2>
 
-                <TasksList {...props}/>
+                <TaskList {...props}/>
 
                 <form onSubmit={handleAddTask}>
                     <div className="form-group">
