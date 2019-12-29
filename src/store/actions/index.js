@@ -27,11 +27,6 @@ export const deleteTask = id => ({
     id
 })
 
-export const editTask = id => ({
-    type: fromActions.EDIT_TASK,
-    id
-})
-
 export const saveEditTask = (id, newTask) => ({
     type: fromActions.SAVE_EDIT_TASK,
     id,
