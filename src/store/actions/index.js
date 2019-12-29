@@ -1,17 +1,21 @@
-import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK, EDIT_TASK, SAVE_EDIT_TASK } from "../constants/actionTypes";
+import * as fromActions from "../constants/actionTypes";
 
 export const setRegisterUser = person => ({
-    type: REGISTER,
+    type: fromActions.REGISTER,
     value: person
 })
 
 export const setCurrentUser = person => ({
-    type: LOGIN,
+    type: fromActions.LOGIN,
     value: person
 })
 
+export const logOutUser = () => ({
+    type: fromActions.LOG_OUT
+})
+
 export const addTask = text => ({
-    type: ADD_TASK,
+    type: fromActions.ADD_TASK,
     payload: {
         isEditing: false,
         text
@@ -19,17 +23,17 @@ export const addTask = text => ({
 })
 
 export const deleteTask = id => ({
-    type: DELETE_TASK,
+    type: fromActions.DELETE_TASK,
     id
 })
 
 export const editTask = id => ({
-    type: EDIT_TASK,
+    type: fromActions.EDIT_TASK,
     id
 })
 
 export const saveEditTask = (id, newTask) => ({
-    type: SAVE_EDIT_TASK,
+    type: fromActions.SAVE_EDIT_TASK,
     id,
     newTask
 })

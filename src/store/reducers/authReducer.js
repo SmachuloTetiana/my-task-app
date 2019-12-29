@@ -1,4 +1,4 @@
-import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK, EDIT_TASK, SAVE_EDIT_TASK } from "../constants/actionTypes";
+import * as fromActionTypes from "../constants/actionTypes";
 
 const managerDB = JSON.parse(localStorage.getItem('managerDB'));
 const initialState = managerDB || {
@@ -11,7 +11,7 @@ export const authReducer = (state = initialState, action) => {
     let updatedCurrentState, updatedState;
 
     switch(action.type) {
-        case REGISTER: 
+        case fromActionTypes.REGISTER: 
             const { value: user } = action;
 
             user.id = state.users.length + 1;
@@ -27,16 +27,30 @@ export const authReducer = (state = initialState, action) => {
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
             return updatedState;
-        case LOGIN:
+        case fromActionTypes.LOGIN:
+            const currentUser = {
+                ...action.value,
+                tasks: action.value && state.tasks.filter(task => task.userId === action.value.id)
+            };
+
             updatedCurrentState = {
                 ...state,
-                currentUser: action.value
+                currentUser
             };
             
             localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
 
             return updatedCurrentState;
-        case ADD_TASK:
+        case fromActionTypes.LOG_OUT:
+            updatedCurrentState = {
+                ...state,
+                currentUser: null
+            };
+            
+            localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
+
+            return updatedCurrentState;
+        case fromActionTypes.ADD_TASK:
             const { payload: task } = action;
 
             task.id = state.tasks.length + 1;
@@ -47,13 +61,20 @@ export const authReducer = (state = initialState, action) => {
                 tasks: [
                     ...state.tasks,
                     task
-                ]
+                ],
+                currentUser: {
+                    ...state.currentUser,
+                    tasks: [
+                        ...state.currentUser.tasks,
+                        task
+                    ]
+                }
             }
 
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
             return updatedState;
-        case DELETE_TASK:
+        case fromActionTypes.DELETE_TASK:
             state.tasks.filter((task, key) => task.id === action.id ? state.tasks.splice(key, 1) : null);
 
             updatedState = {
@@ -66,7 +87,7 @@ export const authReducer = (state = initialState, action) => {
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
             return updatedState;
-        case EDIT_TASK:
+        case fromActionTypes.EDIT_TASK:
             state.tasks.filter(task => task.id === action.id ? task.isEditing = true : task.isEditing = false);
 
             updatedState = {
@@ -79,8 +100,8 @@ export const authReducer = (state = initialState, action) => {
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
             return updatedState;
-        case SAVE_EDIT_TASK:
-            state.tasks.filter(task => {
+        case fromActionTypes.SAVE_EDIT_TASK:
+            state.tasks.forEach(task => {
                 if (task.id === action.id && action.newTask) {
                     task.text = action.newTask;
                     task.isEditing = false;

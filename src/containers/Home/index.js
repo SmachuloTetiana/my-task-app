@@ -3,8 +3,7 @@ import { addTask, deleteTask, editTask, saveEditTask } from "../../store/actions
 import Home from "./Home";
 
 const mapStateToProps = state => ({
-  currentUser: state.auth.currentUser,
-  items: state.auth.tasks
+  currentUser: state.auth.currentUser
 });
 
 const mapDispatchToProps = dispatch => ({

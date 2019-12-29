@@ -21,9 +21,11 @@ const Register = props => {
         setUser({
             email: user.email,
             password: user.password
-        })
+        });
 
         props.setRegisterUser(user);
+
+        props.history.push('/login');
     }
 
     if (props.currentUser) {

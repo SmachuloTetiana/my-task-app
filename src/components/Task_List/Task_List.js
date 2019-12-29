@@ -1,7 +1,7 @@
 import React from 'react';
 import TaskItem from '../Task_Item/Task_Item';
 
-const TaskList = ({ items, deleteTask, editTask, saveEditTask }) => {
+const TaskList = ({ currentUser, deleteTask, editTask, saveEditTask }) => {
     const handleDeleteTask = id => {
         deleteTask(id);
     }
@@ -12,8 +12,13 @@ const TaskList = ({ items, deleteTask, editTask, saveEditTask }) => {
 
     return (
         <div className="tasks-list">
-            {items.map((item, index) => (
-                <TaskItem key={index} {...item} deleteTask={handleDeleteTask} editTaskBtn={handleEditTask} saveEditTask={saveEditTask} />
+            {currentUser.tasks.map((item, index) => (
+                <TaskItem 
+                    {...item} 
+                    key={index} 
+                    deleteTask={handleDeleteTask} 
+                    editTaskBtn={handleEditTask} 
+                    saveEditTask={saveEditTask} />
             ))}
         </div>
     )

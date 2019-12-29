@@ -4,8 +4,9 @@ import { NavLink } from 'react-router-dom';
 const Header = props => {
     const handleLogOut = event => {
         event.preventDefault();
-        props.setCurrentUser(null);
-    }
+        props.logOutUser();
+    };
+
     return (
         <header className="Header">
             <nav className="navbar navbar-expand-sm bg-dark navbar-dark">
