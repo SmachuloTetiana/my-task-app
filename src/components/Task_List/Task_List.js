@@ -1,14 +1,16 @@
 import React from 'react';
 import TaskItem from '../Task_Item/Task_Item';
 
-const TaskList = ({ currentUser, deleteTask, editTask, saveEditTask }) => {
-    const handleDeleteTask = id => {
+const TaskList = ({ currentUser, deleteTask, saveEditTask, syncCurrentUser }) => {
+    const deleteTaskHandler = id => {
         deleteTask(id);
+        syncCurrentUser(currentUser.id);
     }
 
-    const handleEditTask = id => {
-        editTask(id);
-    }
+    const saveEditTaskHandler = (id, newTask) => {
+        saveEditTask(id, newTask);
+        syncCurrentUser(currentUser.id);
+    };
 
     return (
         <div className="tasks-list">
@@ -16,9 +18,8 @@ const TaskList = ({ currentUser, deleteTask, editTask, saveEditTask }) => {
                 <TaskItem 
                     {...item} 
                     key={index} 
-                    deleteTask={handleDeleteTask} 
-                    editTaskBtn={handleEditTask} 
-                    saveEditTask={saveEditTask} />
+                    deleteTask={deleteTaskHandler}
+                    saveEditTask={saveEditTaskHandler} />
             ))}
         </div>
     )

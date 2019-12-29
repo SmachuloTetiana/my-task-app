@@ -30,8 +30,8 @@ const Home = props => {
                             required
                             placeholder="Add your task name..."
                             name="name"
-                            value={task}
                             className="form-control"
+                            value={task}
                             onChange={event => setTask(event.target.value)}>
                         </textarea>
                     </div>

@@ -14,6 +14,11 @@ export const logOutUser = () => ({
     type: fromActions.LOG_OUT
 })
 
+export const syncCurrentUser = id => ({
+    type: fromActions.SYNC_CURRENT_USER,
+    value: id
+})
+
 export const addTask = text => ({
     type: fromActions.ADD_TASK,
     payload: {

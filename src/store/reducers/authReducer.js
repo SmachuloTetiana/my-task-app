@@ -50,6 +50,20 @@ export const authReducer = (state = initialState, action) => {
             localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
 
             return updatedCurrentState;
+        case fromActionTypes.SYNC_CURRENT_USER:
+            const managerDB = JSON.parse(localStorage.getItem('managerDB'));
+            const userToSync = managerDB.users.find(user => user.id === action.value);
+        
+            userToSync.tasks = managerDB.tasks.filter(task => task.userId === action.value);
+
+            updatedCurrentState = {
+                ...state,
+                currentUser: userToSync
+            };
+            
+            localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
+
+            return updatedCurrentState;
         case fromActionTypes.ADD_TASK:
             const { payload: task } = action;
 
