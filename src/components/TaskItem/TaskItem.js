@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const TaskItem = ({ text, id, deleteTask, saveEditTask, shareTask }) => {
+const TaskItem = ({ text, id, ownerEmail, deleteTask, saveEditTask, shareTask }) => {
     var newTaskText, shareUserEmail;
 
     const [ isEditing, setIsEditing ] = useState(false);
@@ -38,6 +38,7 @@ const TaskItem = ({ text, id, deleteTask, saveEditTask, shareTask }) => {
                 ) : (
                     <React.Fragment>
                         {text}
+                        {ownerEmail}
             
                         <button type="button" className="btn btn-primary ml-auto" onClick={() => shareTaskHandler(id)}>
                             Share the Task

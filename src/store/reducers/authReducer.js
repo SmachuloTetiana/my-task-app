@@ -10,8 +10,8 @@ const initialState = managerDB || {
 export const authReducer = (state = initialState, action) => {
     let updatedCurrentState, updatedState;
 
-    switch(action.type) {
-        case fromActionTypes.REGISTER: 
+    switch (action.type) {
+        case fromActionTypes.REGISTER:
             const { value: user } = action;
 
             user.id = state.users.length + 1;
@@ -28,16 +28,27 @@ export const authReducer = (state = initialState, action) => {
 
             return updatedState;
         case fromActionTypes.LOGIN:
+            const tasks = state.tasks
+                .filter(task => task.userId === action.value.id || task.sharedWith.includes(action.value.id))
+                .map(task => {
+                    if (task.sharedWith.includes(action.value.id)) {
+                        const owner = state.users.find(user => user.id === task.userId);
+
+                        task.ownerEmail = owner.email;
+                    }
+
+                    return task;
+                });
             const currentUser = {
                 ...action.value,
-                tasks: action.value && state.tasks.filter(task => task.userId === action.value.id)
+                tasks
             };
 
             updatedCurrentState = {
                 ...state,
                 currentUser
             };
-            
+
             localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
 
             return updatedCurrentState;
@@ -46,21 +57,21 @@ export const authReducer = (state = initialState, action) => {
                 ...state,
                 currentUser: null
             };
-            
+
             localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
 
             return updatedCurrentState;
         case fromActionTypes.SYNC_CURRENT_USER:
             const managerDB = JSON.parse(localStorage.getItem('managerDB'));
             const userToSync = managerDB.users.find(user => user.id === action.value);
-        
+
             userToSync.tasks = managerDB.tasks.filter(task => task.userId === action.value);
 
             updatedCurrentState = {
                 ...state,
                 currentUser: userToSync
             };
-            
+
             localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
 
             return updatedCurrentState;
@@ -70,7 +81,7 @@ export const authReducer = (state = initialState, action) => {
                 text,
                 id: state.tasks.length + 1,
                 userId: state.currentUser.id,
-                shareUserId: []
+                sharedWith: []
             };
 
             updatedState = {
@@ -126,8 +137,8 @@ export const authReducer = (state = initialState, action) => {
 
             if (shareWith) {
                 state.tasks.forEach(task => {
-                    if(task.id === action.id) {
-                        !task.shareUserId.includes(shareWith.id) && task.shareUserId.push(shareWith.id);
+                    if (task.id === action.id) {
+                        !task.sharedWith.includes(shareWith.id) && task.sharedWith.push(shareWith.id);
                     }
                 });
             }
@@ -143,7 +154,7 @@ export const authReducer = (state = initialState, action) => {
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
             return updatedState;
-        default: 
+        default:
             return state;
     }
 }
