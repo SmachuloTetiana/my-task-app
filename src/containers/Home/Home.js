@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import  { Redirect } from 'react-router-dom';
-import TaskList from '../../components/Task_List/Task_List';
+import TaskList from '../../components/TaskList/TaskList';
 
 const Home = props => {
     const [task, setTask] = useState();

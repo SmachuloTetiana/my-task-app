@@ -21,10 +21,7 @@ export const syncCurrentUser = id => ({
 
 export const addTask = text => ({
     type: fromActions.ADD_TASK,
-    payload: {
-        isEditing: false,
-        text
-    }
+    payload: text
 })
 
 export const deleteTask = id => ({
@@ -36,4 +33,10 @@ export const saveEditTask = (id, newTask) => ({
     type: fromActions.SAVE_EDIT_TASK,
     id,
     newTask
+})
+
+export const shareTask = (id, shareUserEmail) => ({
+    type: fromActions.SHARE_TASK,
+    id,
+    shareUserEmail
 })

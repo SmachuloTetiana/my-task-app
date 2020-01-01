@@ -1,7 +1,7 @@
 import React from 'react';
-import TaskItem from '../Task_Item/Task_Item';
+import TaskItem from '../TaskItem/TaskItem';
 
-const TaskList = ({ currentUser, deleteTask, saveEditTask, syncCurrentUser }) => {
+const TaskList = ({ currentUser, deleteTask, saveEditTask, syncCurrentUser, shareTask }) => {
     const deleteTaskHandler = id => {
         deleteTask(id);
         syncCurrentUser(currentUser.id);
@@ -19,7 +19,8 @@ const TaskList = ({ currentUser, deleteTask, saveEditTask, syncCurrentUser }) =>
                     {...item} 
                     key={index} 
                     deleteTask={deleteTaskHandler}
-                    saveEditTask={saveEditTaskHandler} />
+                    saveEditTask={saveEditTaskHandler}
+                    shareTask={shareTask} />
             ))}
         </div>
     )

@@ -65,10 +65,13 @@ export const authReducer = (state = initialState, action) => {
 
             return updatedCurrentState;
         case fromActionTypes.ADD_TASK:
-            const { payload: task } = action;
-
-            task.id = state.tasks.length + 1;
-            task.userId = state.currentUser.id;
+            const { payload: text } = action;
+            const task = {
+                text,
+                id: state.tasks.length + 1,
+                userId: state.currentUser.id,
+                shareUserId: []
+            };
 
             updatedState = {
                 ...state,
@@ -114,6 +117,28 @@ export const authReducer = (state = initialState, action) => {
                     ...state.tasks
                 ]
             }
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
+
+            return updatedState;
+        case fromActionTypes.SHARE_TASK:
+            const shareWith = state.users.find(user => user.email === action.shareUserEmail);
+
+            if (shareWith) {
+                state.tasks.forEach(task => {
+                    if(task.id === action.id) {
+                        !task.shareUserId.includes(shareWith.id) && task.shareUserId.push(shareWith.id);
+                    }
+                });
+            }
+
+
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            };
 
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
