@@ -18,6 +18,7 @@ const TaskList = ({ currentUser, deleteTask, saveEditTask, syncCurrentUser, shar
                 <TaskItem 
                     {...item} 
                     key={index} 
+                    currentUserId={currentUser.id}
                     deleteTask={deleteTaskHandler}
                     saveEditTask={saveEditTaskHandler}
                     shareTask={shareTask} />
