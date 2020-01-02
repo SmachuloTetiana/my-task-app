@@ -1,22 +1,24 @@
-import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK, EDIT_TASK, SAVE_EDIT_TASK } from "../constants/actionTypes";
+import * as uniqid from 'uniqid';
+
+import * as fromActionTypes from "../constants/actionTypes";
 
 const managerDB = JSON.parse(localStorage.getItem('managerDB'));
 const initialState = managerDB || {
     currentUser: null,
-    users: []
+    users: [],
+    tasks: []
 };
 
 export const authReducer = (state = initialState, action) => {
-    let updatedCurrentState;
+    let updatedCurrentState, updatedState;
 
-    switch(action.type) {
-        case REGISTER: 
+    switch (action.type) {
+        case fromActionTypes.REGISTER:
             const { value: user } = action;
 
-            user.id = state.users.length + 1;
-            user.tasks = [];
+            user.id = uniqid('user-');
 
-            const updatedState = {
+            updatedState = {
                 ...state,
                 users: [
                     ...state.users,
@@ -27,57 +29,134 @@ export const authReducer = (state = initialState, action) => {
             localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
             return updatedState;
-        case LOGIN:
+        case fromActionTypes.LOGIN:
+            const tasks = state.tasks
+                .filter(task => task.userId === action.value.id || task.sharedWith.includes(action.value.id))
+                .map(task => {
+                    if (task.sharedWith.includes(action.value.id)) {
+                        const owner = state.users.find(user => user.id === task.userId);
+
+                        task.ownerEmail = owner.email;
+                    }
+
+                    return task;
+                });
+            const currentUser = {
+                ...action.value,
+                tasks
+            };
+
             updatedCurrentState = {
                 ...state,
-                currentUser: action.value
+                currentUser
             };
-            
+
             localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
 
             return updatedCurrentState;
-        case ADD_TASK:
-            state.currentUser.tasks = [...state.currentUser.tasks, action.value];
-            state.users.forEach(user => {
-                if (user.id === state.currentUser.id) {
-                    user.tasks = state.currentUser.tasks;
+        case fromActionTypes.LOG_OUT:
+            updatedCurrentState = {
+                ...state,
+                currentUser: null
+            };
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
+
+            return updatedCurrentState;
+        case fromActionTypes.SYNC_CURRENT_USER:
+            const managerDB = JSON.parse(localStorage.getItem('managerDB'));
+            const userToSync = managerDB.users.find(user => user.id === action.value);
+
+            userToSync.tasks = managerDB.tasks.filter(task => task.userId === action.value || task.sharedWith.includes(action.value));
+
+            updatedCurrentState = {
+                ...state,
+                currentUser: userToSync
+            };
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedCurrentState));
+
+            return updatedCurrentState;
+        case fromActionTypes.ADD_TASK:
+            const { payload: text } = action;
+            const task = {
+                text,
+                id: uniqid('task-'),
+                userId: state.currentUser.id,
+                sharedWith: []
+            };
+
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks,
+                    task
+                ],
+                currentUser: {
+                    ...state.currentUser,
+                    tasks: [
+                        ...state.currentUser.tasks,
+                        task
+                    ]
+                }
+            }
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
+
+            return updatedState;
+        case fromActionTypes.DELETE_TASK:
+            state.tasks.filter((task, key) => task.id === action.id ? state.tasks.splice(key, 1) : null);
+
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            }
+
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
+
+            return updatedState;
+        case fromActionTypes.SAVE_EDIT_TASK:
+            state.tasks.forEach(task => {
+                if (task.id === action.id && action.newTask) {
+                    task.text = action.newTask;
                 }
             });
 
-            localStorage.setItem('managerDB', JSON.stringify(state));
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            }
 
-            return state;
-        case DELETE_TASK:
-            state.currentUser.tasks.splice(action.value, 1);
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
-            state.users.forEach(user => {
-                if(user.id === state.currentUser.id) {
-                    user.tasks = state.currentUser.tasks
-                }
-            })
-            
-            localStorage.setItem('managerDB', JSON.stringify(state));
+            return updatedState;
+        case fromActionTypes.SHARE_TASK:
+            const shareWith = state.users.find(user => user.email === action.shareUserEmail);
 
-            return state;
-        case EDIT_TASK:
-            state.currentUser.tasks.forEach((task, key) => {
-                if(key === action.itemId) {
-                    state.currentUser.tasks[key].editItem = true;
-                } else {
-                    state.currentUser.tasks[key].editItem = false;
-                }
-            });
+            if (shareWith) {
+                state.tasks.forEach(task => {
+                    if (task.id === action.id) {
+                        !task.sharedWith.includes(shareWith.id) && task.sharedWith.push(shareWith.id);
+                    }
+                });
+            }
 
-            return state;
-        case SAVE_EDIT_TASK:
-            state.currentUser.tasks[action.itemId] = action.value;
 
-            // finish user
+            updatedState = {
+                ...state,
+                tasks: [
+                    ...state.tasks
+                ]
+            };
 
-            localStorage.setItem('managerDB', JSON.stringify(state));
+            localStorage.setItem('managerDB', JSON.stringify(updatedState));
 
-            return state;
-        default: 
+            return updatedState;
+        default:
             return state;
     }
 }

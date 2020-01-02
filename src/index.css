@@ -12,6 +12,14 @@ code {
     monospace;
 }
 
+.task p {
+  margin: 0;
+}
+
+.task .btn {
+  margin-left: 15px;
+}
+
 .navbar {
   margin-bottom: 30px;
 }
@@ -24,6 +32,14 @@ code {
   margin-right: .5rem;
 }
 
-.task {
+.task, .shared-form {
   margin: 15px 0;
+}
+
+.shared-with{
+  color: #4a6d8c;
+}
+
+.shared-with strong {
+  color: #000;
 }

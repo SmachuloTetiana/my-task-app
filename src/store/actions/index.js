@@ -1,45 +1,42 @@
-import { REGISTER, LOGIN, ADD_TASK, DELETE_TASK, EDIT_TASK, SAVE_EDIT_TASK } from "../constants/actionTypes";
+import * as fromActions from "../constants/actionTypes";
 
-export const setRegisterUser = person => {
-    return {
-        type: REGISTER,
-        value: person
-    }
-}
+export const setRegisterUser = person => ({
+    type: fromActions.REGISTER,
+    value: person
+})
 
-export const setCurrentUser = person => {
-    return {
-        type: LOGIN,
-        value: person
-    }
-}
+export const setCurrentUser = person => ({
+    type: fromActions.LOGIN,
+    value: person
+})
 
-export const addTask = task => {
-    return {
-        type: ADD_TASK,
-        value: task
-    }
-}
+export const logOutUser = () => ({
+    type: fromActions.LOG_OUT
+})
 
-export const deletedTask = id => {
-    return {
-        type: DELETE_TASK,
-        value: id
-    }
-}
+export const syncCurrentUser = id => ({
+    type: fromActions.SYNC_CURRENT_USER,
+    value: id
+})
 
-export const editTask = id => {
-    return {
-        type: EDIT_TASK,
-        editItem: false,
-        itemId: id
-    }
-}
+export const addTask = text => ({
+    type: fromActions.ADD_TASK,
+    payload: text
+})
 
-export const saveEditTask = (id, editedText) => {
-    return {
-        type: SAVE_EDIT_TASK,
-        itemId: id,
-        value: editedText
-    }
-}
+export const deleteTask = id => ({
+    type: fromActions.DELETE_TASK,
+    id
+})
+
+export const saveEditTask = (id, newTask) => ({
+    type: fromActions.SAVE_EDIT_TASK,
+    id,
+    newTask
+})
+
+export const shareTask = (id, shareUserEmail) => ({
+    type: fromActions.SHARE_TASK,
+    id,
+    shareUserEmail
+})

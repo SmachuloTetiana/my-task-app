@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { setCurrentUser } from '../../store/actions';
+import { logOutUser } from '../../store/actions';
 import Header from './Header';
 
 const mapStateToProps = state => ({
@@ -7,7 +7,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-    setCurrentUser: user => dispatch(setCurrentUser(user))
+    logOutUser: () => dispatch(logOutUser())
 })
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);
