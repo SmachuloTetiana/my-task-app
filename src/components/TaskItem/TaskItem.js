@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 
 const TaskItem = props => {
-    var newTaskText, shareUserEmail;
+    let newTaskText, shareUserEmail;
 
-    const [ isEditing, setIsEditing ] = useState(false);
-
-    const [ isSharing, setIsSharing ] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [isSharing, setIsSharing] = useState(false);
 
     const handleSaveEditTask = (id, newTask) => {
         props.saveEditTask(id, newTask);
@@ -23,59 +22,67 @@ const TaskItem = props => {
 
     return (
         <React.Fragment>
-        <div className="task d-flex flex-row justify-content-between">
-            {
-                isEditing ? (
-                    <React.Fragment>
-                        <form className="d-flex flex-row justify-content-between" style={{'flex': 'auto'}}>
-                            <input className="form-control" type="text" defaultValue={props.text} onChange={event => newTaskText = event.target.value} />
+            <div className="task d-flex flex-row justify-content-between align-items-center">
+                {
+                    isEditing ? (
+                        <React.Fragment>
+                            <form className="d-flex flex-row justify-content-between" style={{ 'flex': 'auto' }}>
+                                <input className="form-control" type="text" defaultValue={props.text} onChange={event => newTaskText = event.target.value} />
 
-                            <button type="button" className="btn btn-primary" onClick={() => handleSaveEditTask(props.id, newTaskText)}>
-                                Save
+                                <button type="button" className="btn btn-primary" onClick={() => handleSaveEditTask(props.id, newTaskText)}>
+                                    Save
                             </button>
-                        </form>        
-                    </React.Fragment>                    
-                ) : (        
-                    <React.Fragment>
-                        {props.text}
+                            </form>
+                        </React.Fragment>
+                    ) : (
+                            <React.Fragment>
+                                <p>{props.text}</p>
 
-                        {
-                            props.sharedWith.includes(props.currentUserId) ? (
-                                <span className="shared-with"><strong>Shared with me:</strong> {props.ownerEmail}</span>
-                            ) : (
-                                <React.Fragment>
-                                         <button type="button" className="btn btn-primary ml-auto" onClick={() => shareTaskHandler(props.id)}>
-                                             Share the Task
+                                {
+                                    props.sharedWith.includes(props.currentUserId) ? (
+                                        <span className="shared-with"><strong>Shared with me:</strong> {props.ownerEmail}</span>
+                                    ) : (
+                                            <React.Fragment>
+                                                <button type="button" className="btn btn-primary ml-auto" onClick={() => shareTaskHandler(props.id)}>
+                                                    Share the Task
                                          </button>
-                
-                                         <button type="button" className="btn btn-dark" onClick={() => editTaskHandler(props.id)}>
-                                             Edit
-                                         </button>
-                
-                                         <button type="button" className="btn btn-danger" onClick={() => props.deleteTask(props.id)}>
-                                             Delete
-                                         </button>
-                                     </React.Fragment>
-                            )
-                        }
-                    </React.Fragment>
-                )
-            }
-        </div>
 
-        {isSharing ? (
-            <form className="d-flex shared-form">
-                <input 
-                    className="form-control" 
-                    type="email" 
-                    name="email"
-                    value={shareUserEmail}
-                    onChange={event => shareUserEmail = event.target.value}/>
-                <button type="button" className="btn btn-primary"  onClick={() => shareUserHandler(props.id, shareUserEmail)}>
-                    Share
+                                                <button
+                                                    type="button"
+                                                    className="btn btn-dark"
+                                                    disabled={isSharing}
+                                                    onClick={() => editTaskHandler(props.id)}>
+                                                    Edit
+                                         </button>
+
+                                                <button type="button" className="btn btn-danger" onClick={() => props.deleteTask(props.id)}>
+                                                    Delete
+                                         </button>
+                                            </React.Fragment>
+                                        )
+                                }
+                            </React.Fragment>
+                        )
+                }
+            </div>
+
+            {isSharing ? (
+                <form className="d-flex shared-form">
+                    <input
+                        className="form-control"
+                        type="email"
+                        name="email"
+                        placeholder="User email"
+                        value={shareUserEmail}
+                        onChange={event => shareUserEmail = event.target.value} />
+                    <button
+                        type="button"
+                        className="btn btn-primary ml-3"
+                        onClick={() => shareUserHandler(props.id, shareUserEmail)}>
+                        Share
                 </button>
-            </form>
-        ) : null}
+                </form>
+            ) : null}
         </React.Fragment>
     )
 }

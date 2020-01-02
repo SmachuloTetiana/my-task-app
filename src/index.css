@@ -12,6 +12,10 @@ code {
     monospace;
 }
 
+.task p {
+  margin: 0;
+}
+
 .task .btn {
   margin-left: 15px;
 }

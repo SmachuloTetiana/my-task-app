@@ -1,3 +1,5 @@
+import * as uniqid from 'uniqid';
+
 import * as fromActionTypes from "../constants/actionTypes";
 
 const managerDB = JSON.parse(localStorage.getItem('managerDB'));
@@ -14,7 +16,7 @@ export const authReducer = (state = initialState, action) => {
         case fromActionTypes.REGISTER:
             const { value: user } = action;
 
-            user.id = state.users.length + 1;
+            user.id = uniqid('user-');
 
             updatedState = {
                 ...state,
@@ -79,7 +81,7 @@ export const authReducer = (state = initialState, action) => {
             const { payload: text } = action;
             const task = {
                 text,
-                id: state.tasks.length + 1,
+                id: uniqid('task-'),
                 userId: state.currentUser.id,
                 sharedWith: []
             };
