@@ -17,7 +17,7 @@ const store = createStore(
 
 ReactDOM.render(
     <Provider store={store}>
-        <Router>
+        <Router basename="/my-task-app">
             <App />
         </Router>
     </Provider>, 
